@@ -105,11 +105,11 @@ export default {
       ];
     }
   },
-  mounted: function() {
+  mounted: function () {
     this.axios.get("http://127.0.0.1:8000/min").then(response => {
-      this.totalVuePackages = response.data.total;
-      console.log(response.data);
-    });
+      this.ministry = response.data
+      console.log(response.data)
+    })
   }
-};
+}
 </script>
