@@ -4,6 +4,7 @@ import HelloWorld from '@/components/HelloWorld'
 import Form from '@/components/Form'
 
 Vue.use(Router)
+Vue.config.silent = true
 
 export default new Router({
   routes: [
