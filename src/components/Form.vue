@@ -1,59 +1,91 @@
 <template>
-  <div>
+  <div style="margin:20px;">
     <md-field md-clearable>
       <label>ชื่อผู้ให้ข้อมูล</label>
-      <md-input v-model='pname'></md-input>
-      <span class='md-helper-text'>ตัวอย่าง สมมติ เกตมณี </span>
+      <md-input v-model="pname"></md-input>
+      <span class="md-helper-text">ตัวอย่าง สมมติ เกตมณี </span>
     </md-field>
     <md-field md-clearable>
       <label>เบอร์โทร</label>
-      <md-input v-model='tel'></md-input>
-      <span class='md-helper-text'>ตัวอย่าง 0812345678 </span>
+      <md-input v-model="tel"></md-input>
+      <span class="md-helper-text">ตัวอย่าง 0812345678 </span>
     </md-field>
     <md-field>
       <label>อีเมล</label>
-      <md-input v-model='email'></md-input>
-      <span class='md-helper-text'>ตัวอย่าง example@exmaple.com </span>
+      <md-input v-model="email"></md-input>
+      <span class="md-helper-text">ตัวอย่าง example@exmaple.com </span>
     </md-field>
     <md-field>
-      <label for='ministry'>กระทรวง</label>
-      <md-select v-model='selectedMinistry' name='ministry' id='ministry' @md-selected='onMinistryChange($event)' >
+      <label for="ministry">กระทรวง</label>
+      <md-select
+        v-model="selectedMinistry"
+        name="ministry"
+        id="ministry"
+        @md-selected="onMinistryChange($event)"
+      >
         <md-option v-for="item in ministry" v-bind:key="item" :value="item.key">
-            {{item.name}}
+          {{ item.name }}
         </md-option>
       </md-select>
     </md-field>
     <md-field>
-      <label for='department'>กรม</label>
+      <label for="department">กรม</label>
       <md-select
-        v-model='selectedDepartment'
-        name='department'
-        id='department'
-        :disabled='department == null'
+        v-model="selectedDepartment"
+        name="department"
+        id="department"
+        :disabled="department == null"
       >
         <md-option
-          v-for='item in department' v-bind:key='item' :value="item.key"
+          v-for="item in department"
+          v-bind:key="item"
+          :value="item.key"
           >{{ item.name }}
         </md-option>
       </md-select>
     </md-field>
+    <!-- <div class="md-layout" :class="md-alignment-center-left">
+      <div class="md-layout-item md-size-25">
+        <span class="md-prefix">มีระบบ data catalog</span>
+      </div>
+      <div class="md-layout-item md-size-25">
+        <md-radio v-model="radio" :value="true">Object A</md-radio>
+        <md-radio v-model="radio" :value="false">Object B</md-radio>
+      </div>
+    </div> -->
+    <div>
+      <span class="md-prefix" style="float: left; margin: 16px 16px 16px 0px;"
+        >มีระบบ data catalog</span
+      >
+      <md-radio v-model="radio" :value="true" style="float: left;">มี</md-radio>
+      <md-radio v-model="radio" :value="false" style="float: left;"
+        >ไม่มี</md-radio
+      >
+    </div>
+    <md-field>
+      <label>Upload Template</label>
+      <md-file v-model="template" />
+    </md-field>
+    <md-button class="md-raised md-primary" style="float: right">Submit</md-button>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'TextFields',
+  name: "TextFields",
   data: () => ({
-    pname: '',
-    tel: '',
-    email: '',
+    pname: "",
+    tel: "",
+    email: "",
     ministry: [
-      { name: 'กระทรวง1', key: '1' },
-      { name: 'กระทรวง2', key: '2' }
+      { name: "กระทรวง1", key: "1" },
+      { name: "กระทรวง2", key: "2" }
     ],
     department: null,
     selectedMinistry: null,
     selectedDepartment: null,
+    radio: false,
+    template: null,
     type: null,
     withLabel: null,
     inline: null,
@@ -63,12 +95,12 @@ export default {
     disabled: null
   }),
   methods: {
-    onMinistryChange: function onMinistryChange (event) {
+    onMinistryChange: function onMinistryChange(event) {
       this.department = [
-        { name: 'Grom A', key: 'ga' },
-        { name: 'Grom B', key: 'gb' }
-      ]
+        { name: "Grom A", key: "ga" },
+        { name: "Grom B", key: "gb" }
+      ];
     }
   }
-}
+};
 </script>
