@@ -66,17 +66,19 @@
       <label>Upload Template</label>
       <md-file v-model="template" />
     </md-field>
-    <md-button class="md-raised md-primary" style="float: right">Submit</md-button>
+    <md-button class="md-raised md-primary" style="float: right"
+      >Submit</md-button
+    >
   </div>
 </template>
 
 <script>
 export default {
-  name: 'TextFields',
+  name: "TextFields",
   data: () => ({
-    pname: '',
-    tel: '',
-    email: '',
+    pname: "",
+    tel: "",
+    email: "",
     // ministry: [
     //   { name: 'กระทรวง1', key: '1' },
     //   { name: 'กระทรวง2', key: '2' }
@@ -96,17 +98,18 @@ export default {
     disabled: null
   }),
   methods: {
-    onMinistryChange: function onMinistryChange (event) {
+    onMinistryChange: function onMinistryChange(event) {
       this.department = [
-        { name: 'Grom A', key: 'ga' },
-        { name: 'Grom B', key: 'gb' }
-      ]
+        { name: "Grom A", key: "ga" },
+        { name: "Grom B", key: "gb" }
+      ];
     }
   },
-  mounted: function () {
-    this.axios.get('http://127.0.0.1:8000/min')
-      .then(response => this.totalVuePackages = response.data.total);
-    console.log(this.ministry)
+  mounted: function() {
+    this.axios.get("http://127.0.0.1:8000/min").then(response => {
+      this.totalVuePackages = response.data.total;
+      console.log(response.data);
+    });
   }
-}
+};
 </script>
