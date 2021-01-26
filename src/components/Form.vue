@@ -104,7 +104,8 @@ export default {
     }
   },
   mounted: function () {
-    this.axios.get('http://127.0.0.1:8000/min').then(response => (this.ministry = response))
+    this.axios.get('http://127.0.0.1:8000/min')
+      .then(response => this.totalVuePackages = response.data.total);
     console.log(this.ministry)
   }
 }
