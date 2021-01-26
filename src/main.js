@@ -8,7 +8,13 @@ import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.min.css'
 import 'vue-material/dist/theme/default.css'
 
+import VueAxios from 'vue-axios'
+import axios from 'axios'
+
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
+
 Vue.use(VueMaterial)
+Vue.use(VueAxios, axios)
 
 Vue.config.productionTip = false
 
