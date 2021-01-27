@@ -1,5 +1,5 @@
 <template>
-  <div style="margin:20px;">
+  <div style="margin:2.5em;">
     <md-field md-clearable>
       <label>ชื่อผู้ให้ข้อมูล</label>
       <md-input v-model="pname"></md-input>
@@ -66,9 +66,11 @@
       <label>Upload Template</label>
       <md-file v-model="template" />
     </md-field>
-    <md-button class="md-raised md-primary" style="float: right"
-      >Submit</md-button
-    >
+    <div style="float:right;">
+      <md-button class="md-raised md-primary" style="margin-bottom:2em;"
+        >Submit</md-button
+      >
+    </div>
   </div>
 </template>
 
@@ -105,11 +107,11 @@ export default {
       ];
     }
   },
-  mounted: function () {
+  mounted: function() {
     this.axios.get("http://127.0.0.1:8000/min").then(response => {
-      this.ministry = response.data
-      console.log(response.data)
-    })
+      this.ministry = response.data;
+      console.log(response.data);
+    });
   }
-}
+};
 </script>
