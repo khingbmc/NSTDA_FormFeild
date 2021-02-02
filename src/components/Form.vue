@@ -101,10 +101,13 @@ export default {
   }),
   methods: {
     onMinistryChange: function onMinistryChange(event) {
-      this.department = [
-        { name: "Grom A", key: "ga" },
-        { name: "Grom B", key: "gb" }
-      ];
+      this.department = null;
+      this.selectedDepartment = null;
+      this.axios.get("http://127.0.0.1:8000/dep?ministry="+this.selectedMinistry).then(response => {
+      this.department = response.data;
+      console.log(response.data);
+    });
+
     }
   },
   mounted: function() {
