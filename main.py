@@ -1,10 +1,11 @@
 from typing import Optional
-from fastapi import FastAPI, Header, Body
+from fastapi import FastAPI, Header, Body, File
 from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 import psycopg2
 from datetime import datetime
 from pydantic import BaseModel
+
 origins = [
     "*"
 ]
@@ -57,7 +58,7 @@ class FormObject(BaseModel):
     phone_number : str 
     ministry : str
     department : str
-    template_upload : str 
+    template_upload : str
     email = str
     # submit_date : datetime = datetime.now().isoformat(timespec='seconds')
 
@@ -65,7 +66,7 @@ class FormObject(BaseModel):
 
 @app.post("/submit")
 async def submit_form(request_body : FormObject): 
-    print(request_body)
+    print(type(request_body.template_upload))
     date = datetime.now()
     get_request = (request_body.name, request_body.phone_number, request_body.ministry, request_body.department, request_body.template_upload, date, request_body.email)
     get_data = query_data("""INSERT INTO public.survey_spm
@@ -73,3 +74,4 @@ async def submit_form(request_body : FormObject):
                             VALUES( '%s', '%s', '%s', '%s', '%s', '%s');""" % (get_request),False)
     connection.commit()
            
+

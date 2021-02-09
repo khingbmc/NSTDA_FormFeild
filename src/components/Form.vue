@@ -110,17 +110,42 @@ export default {
 
     },
      
- 
-    onSubmitForm: function onSubmitForm(event) {
-      this.axios.post("http://127.0.0.1:8000/submit", 
-      { name: this.pname, phone_number: this.tel, ministry: this.selectedMinistry, department : this.selectedDepartment, email : this.email, template_upload : this.template }).then(response => {
-      console.log("response: ", response)
-    // do something about responsethi
-  }).catch(err => {
-    console.error(err)
-  });
+     onSubmitForm: function onSubmitForm(event){
 
-     }    
+            let formData = new FormData();
+
+            formData.append('name', this.pname);
+            formData.append('phone_number', this.tel);
+            formData.append('email', this.email);
+            formData.append('ministry', this.selectedMinistry);
+            formData.append('department', this.selectedDepartment);
+            formData.append('template_upload', this.template);
+
+            this.axios.post( 'http://127.0.0.1:8000/submit', 
+                formData,
+                {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+              }
+            ).then(function(){
+          console.log('SUCCESS!!');
+        })
+        .catch(function(err){
+          console.log('FAILURE!!');
+          console.log(err);
+        });
+      }
+  //   onSubmitForm: function onSubmitForm(event) {
+  //     this.axios.post("http://127.0.0.1:8000/submit", 
+  //     { name: this.pname, phone_number: this.tel, ministry: this.selectedMinistry, department : this.selectedDepartment, email : this.email }).then(response => {
+  //     console.log("response: ", response)
+  //   // do something about responsethi
+  // }).catch(err => {
+  //   console.error(err)
+  // });
+
+  //    }    
   },
   mounted: function() {
     this.axios.get("http://127.0.0.1:8000/min").then(response => {
