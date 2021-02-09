@@ -15,11 +15,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-connection = psycopg2.connect(user="postgresoriginal",
+connection = psycopg2.connect(user="postgresadmin",
                                 password="12345678",
-                                host="gbdiserv.can6o4phsaje.ap-southeast-1.rds.amazonaws.com",
+                                host="db-spm.can6o4phsaje.ap-southeast-1.rds.amazonaws.com",
                                 port="5432",
-                                database="gbdi")
+                                database="postgres")
 def query_data(postgreSQL_select_Query):
     cursor = connection.cursor()
 
