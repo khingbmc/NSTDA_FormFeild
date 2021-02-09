@@ -67,7 +67,7 @@
       <md-file v-model="template" />
     </md-field>
     <div style="float:right;">
-      <md-button class="md-raised md-primary" style="margin-bottom:2em;"
+      <md-button class="md-raised md-primary" style="margin-bottom:2em;" @click="onSubmitForm($event)"
         >Submit</md-button
       >
     </div>
@@ -108,7 +108,19 @@ export default {
       console.log(response.data);
     });
 
-    }
+    },
+     
+ 
+    onSubmitForm: function onSubmitForm(event) {
+      this.axios.post("http://127.0.0.1:8000/submit", 
+      { name: this.pname, phone_number: this.tel, ministry: this.selectedMinistry, department : this.selectedDepartment, email : this.email, template_upload : this.template }).then(response => {
+      console.log("response: ", response)
+    // do something about responsethi
+  }).catch(err => {
+    console.error(err)
+  });
+
+     }    
   },
   mounted: function() {
     this.axios.get("http://127.0.0.1:8000/min").then(response => {
