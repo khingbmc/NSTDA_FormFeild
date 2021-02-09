@@ -64,10 +64,13 @@
     </div>
     <md-field>
       <label>Upload Template</label>
-      <md-file v-model="template" />
+      <md-file v-model="file.name" @md-change="onFileUpload($event)"></md-file>
     </md-field>
     <div style="float:right;">
-      <md-button class="md-raised md-primary" style="margin-bottom:2em;" @click="onSubmitForm($event)"
+      <md-button
+        class="md-raised md-primary"
+        style="margin-bottom:2em;"
+        @click="onSubmitForm($event)"
         >Submit</md-button
       >
     </div>
@@ -90,7 +93,7 @@ export default {
     selectedMinistry: null,
     selectedDepartment: null,
     radio: false,
-    template: null,
+    file: { name: "" },
     type: null,
     withLabel: null,
     inline: null,
@@ -100,52 +103,56 @@ export default {
     disabled: null
   }),
   methods: {
+    onFileUpload(evt) {
+      this.file = evt[0];
+    },
     onMinistryChange: function onMinistryChange(event) {
       this.department = null;
       this.selectedDepartment = null;
-      this.axios.get("http://127.0.0.1:8000/dep?ministry="+this.selectedMinistry).then(response => {
-      this.department = response.data;
-      console.log(response.data);
-    });
-
+      this.axios
+        .get("http://127.0.0.1:8000/dep?ministry=" + this.selectedMinistry)
+        .then(response => {
+          this.department = response.data;
+          console.log(response.data);
+        });
     },
-     
-     onSubmitForm: function onSubmitForm(event){
 
-            let formData = new FormData();
+    onSubmitForm: function onSubmitForm(event) {
+      const formData = new FormData();
 
-            formData.append('name', this.pname);
-            formData.append('phone_number', this.tel);
-            formData.append('email', this.email);
-            formData.append('ministry', this.selectedMinistry);
-            formData.append('department', this.selectedDepartment);
-            formData.append('template_upload', this.template);
+      formData.append("name", this.pname);
+      //formData.append("phone_number", this.tel);
+      //formData.append("email", this.email);
+      //formData.append("ministry", this.selectedMinistry);
+      //formData.append("department", this.selectedDepartment);
+      formData.append("template_upload", this.file);
 
-            this.axios.post( 'http://127.0.0.1:8000/submit', 
-                formData,
-                {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-              }
-            ).then(function(){
-          console.log('SUCCESS!!');
+      console.log(formData);
+
+      this.axios
+        .post("http://127.0.0.1:8000/submit", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
         })
-        .catch(function(err){
-          console.log('FAILURE!!');
+        .then(function() {
+          console.log("SUCCESS!!");
+        })
+        .catch(function(err) {
+          console.log("FAILURE!!");
           console.log(err);
         });
-      }
-  //   onSubmitForm: function onSubmitForm(event) {
-  //     this.axios.post("http://127.0.0.1:8000/submit", 
-  //     { name: this.pname, phone_number: this.tel, ministry: this.selectedMinistry, department : this.selectedDepartment, email : this.email }).then(response => {
-  //     console.log("response: ", response)
-  //   // do something about responsethi
-  // }).catch(err => {
-  //   console.error(err)
-  // });
+    }
+    //   onSubmitForm: function onSubmitForm(event) {
+    //     this.axios.post("http://127.0.0.1:8000/submit",
+    //     { name: this.pname, phone_number: this.tel, ministry: this.selectedMinistry, department : this.selectedDepartment, email : this.email }).then(response => {
+    //     console.log("response: ", response)
+    //   // do something about responsethi
+    // }).catch(err => {
+    //   console.error(err)
+    // });
 
-  //    }    
+    //    }
   },
   mounted: function() {
     this.axios.get("http://127.0.0.1:8000/min").then(response => {

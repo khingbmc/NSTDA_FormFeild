@@ -1,10 +1,11 @@
 from typing import Optional
-from fastapi import FastAPI, Header, Body, File
+from fastapi import FastAPI, Header, Body, File, UploadFile, Request
 from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 import psycopg2
 from datetime import datetime
 from pydantic import BaseModel
+import shutil
 
 origins = [
     "*"
@@ -54,24 +55,23 @@ async def read_root(ministry:int = 1):
     return lst_dict
 
 class FormObject(BaseModel):
-    name : str 
-    phone_number : str 
-    ministry : str
-    department : str
-    template_upload : str
-    email = str
-    # submit_date : datetime = datetime.now().isoformat(timespec='seconds')
-
-
+    name : str=''
+    phone_number : str=''
+    email : str=''
+    ministry : str=''
+    department : str=''
 
 @app.post("/submit")
-async def submit_form(request_body : FormObject): 
-    print(type(request_body.template_upload))
+async def create_upload_file(request_body: FormObject={}, template_upload : UploadFile = File(...)):
+    # write_file
+    file_location = f"request_submitted/{template_upload.filename}"
+    with open(file_location, "wb+") as file_object:
+        shutil.copyfileobj(template_upload.file, file_object)
     date = datetime.now()
-    get_request = (request_body.name, request_body.phone_number, request_body.ministry, request_body.department, request_body.template_upload, date, request_body.email)
-    get_data = query_data("""INSERT INTO public.survey_spm
-                            ("name", phone_number, ministry, department, template_upload, submit_date, email)
-                            VALUES( '%s', '%s', '%s', '%s', '%s', '%s');""" % (get_request),False)
-    connection.commit()
-           
+    # get_request = (request_body.name, request_body.phone_number, request_body.ministry, request_body.department, request_body.template_upload, date, request_body.email)
+    # get_data = query_data("""INSERT INTO public.survey_spm
+    #                         ("name", phone_number, ministry, department, template_upload, submit_date, email)
+    #                         VALUES( '%s', '%s', '%s', '%s', '%s', '%s');""" % (get_request),False)
+    # connection.commit()
+
 
