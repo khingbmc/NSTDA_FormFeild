@@ -1,11 +1,13 @@
 from typing import Optional
-from fastapi import FastAPI, Header, Body, File, UploadFile, Request
+from fastapi import FastAPI, Header, Body, File, UploadFile, Request, Form
 from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 import psycopg2
 from datetime import datetime
 from pydantic import BaseModel
 import shutil
+import os
+
 
 origins = [
     "*"
@@ -32,6 +34,10 @@ def query_data(postgreSQL_select_Query,check=True):
         records = cursor.fetchall() 
     #     print("Print each row and it's columns values")
         return records
+    if check == 'get':
+        records = cursor.fetchone() 
+    #     print("Print each row and it's columns values")
+        return records
 
 @app.get("/min")
 def read_root():
@@ -55,23 +61,34 @@ async def read_root(ministry:int = 1):
     return lst_dict
 
 class FormObject(BaseModel):
-    name : str=''
-    phone_number : str=''
-    email : str=''
-    ministry : str=''
-    department : str=''
+    name : str
+    phone_number : str
+    email : str
+    ministry : str
+    department : str
 
 @app.post("/submit")
-async def create_upload_file(request_body: FormObject={}, template_upload : UploadFile = File(...)):
+async def create_upload_file(name : str = Form(...), phone_number : str = Form(...), email : str = Form(...), ministry : str = Form(...),department : str = Form(...), template_upload : UploadFile = File(...)):
     # write_file
-    file_location = f"request_submitted/{template_upload.filename}"
+    ministry_name = query_data("""SELECT  "name"
+                                FROM public.ministry
+                                WHERE id = %d;  """ % (int(ministry)))
+    day_path = datetime.now().strftime('%d-%m-%Y')
+    if not os.path.exists('request_submitted/'+day_path):
+        os.mkdir('request_submitted/'+day_path)
+
+    file_location = f"request_submitted/{day_path}/{template_upload.filename}"
+
     with open(file_location, "wb+") as file_object:
         shutil.copyfileobj(template_upload.file, file_object)
-    date = datetime.now()
-    # get_request = (request_body.name, request_body.phone_number, request_body.ministry, request_body.department, request_body.template_upload, date, request_body.email)
-    # get_data = query_data("""INSERT INTO public.survey_spm
-    #                         ("name", phone_number, ministry, department, template_upload, submit_date, email)
-    #                         VALUES( '%s', '%s', '%s', '%s', '%s', '%s');""" % (get_request),False)
-    # connection.commit()
+
+    now_date = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+    ministry_name = ''.join(ministry_name[0])
+    get_request = (name, phone_number, ministry_name, department, template_upload.filename, now_date, email)
+    get_data = query_data("""INSERT INTO public.survey_spm
+                            ("name", phone_number, ministry, department, template_upload, submit_date, email)
+                            VALUES( '%s', '%s', '%s', '%s', '%s', '%s', '%s');""" % (get_request),False)
+    
+    connection.commit()
 
 
