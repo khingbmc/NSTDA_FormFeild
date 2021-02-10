@@ -7,20 +7,20 @@
       md-description="ตรวจสอบนโยบายที่เกี่ยวข้องและดาวน์โหลด
       Template กรอกข้อมูลจาก link หรือ QR Code"
     >
-        <div
-          pbi-resize="powerbi"
-          pbi-resize-src="https://app.powerbi.com/view?r=eyJrIjoiZDEzODk5ZjQtMTVhOS00NDk3LWExYTUtZWQ0OWE0OTVjZmQwIiwidCI6IjRhNGY3YjUyLTBlMDUtNDQxNS04NDU0LTc2ODliMDBhODdiMiIsImMiOjEwfQ%3D%3D"
-          pbi-resize-min-width="800"
-          pbi-default-width="600px"
-          pbi-default-height="488"
-          pbi-resize-width="16"
-          pbi-resize-height="9"
-          pbi-resize-load-event="page-load"
-          pbi-resize-header="true"
-          style="position: relative;"
-        >
-          <iframe frameborder="0" allowfullscreen="true"></iframe>
-        </div>
+      <div
+        pbi-resize="powerbi"
+        pbi-resize-src="https://app.powerbi.com/view?r=eyJrIjoiZDEzODk5ZjQtMTVhOS00NDk3LWExYTUtZWQ0OWE0OTVjZmQwIiwidCI6IjRhNGY3YjUyLTBlMDUtNDQxNS04NDU0LTc2ODliMDBhODdiMiIsImMiOjEwfQ%3D%3D"
+        pbi-resize-min-width="800"
+        pbi-default-width="600px"
+        pbi-default-height="488"
+        pbi-resize-width="16"
+        pbi-resize-height="9"
+        pbi-resize-load-event="page-load"
+        pbi-resize-header="true"
+        style="position: relative;"
+      >
+        <iframe frameborder="0" allowfullscreen="true"></iframe>
+      </div>
     </md-step>
     <md-step
       id="second"
@@ -100,7 +100,10 @@
         </div>
         <md-field>
           <label>Upload Template</label>
-          <md-file v-model="template" />
+          <md-file
+            v-model="file.name"
+            @md-change="onFileUpload($event)"
+          ></md-file>
         </md-field>
         <div style="float:right;">
           <md-button
@@ -131,7 +134,7 @@ export default {
     selectedMinistry: null,
     selectedDepartment: null,
     radio: false,
-    template: null,
+    file: { name: "" },
     type: null,
     withLabel: null,
     inline: null,
@@ -141,6 +144,9 @@ export default {
     disabled: null
   }),
   methods: {
+    onFileUpload(evt) {
+      this.file = evt[0];
+    },
     onMinistryChange: function onMinistryChange(event) {
       this.department = null;
       this.selectedDepartment = null;
@@ -153,14 +159,16 @@ export default {
     },
 
     onSubmitForm: function onSubmitForm(event) {
-      let formData = new FormData();
+      const formData = new FormData();
 
       formData.append("name", this.pname);
       formData.append("phone_number", this.tel);
       formData.append("email", this.email);
       formData.append("ministry", this.selectedMinistry);
       formData.append("department", this.selectedDepartment);
-      formData.append("template_upload", this.template);
+      formData.append("template_upload", this.file);
+
+      console.log(formData);
 
       this.axios
         .post("http://127.0.0.1:8000/submit", formData, {
@@ -176,6 +184,7 @@ export default {
           console.log(err);
         });
     }
+
     //   onSubmitForm: function onSubmitForm(event) {
     //     this.axios.post("http://127.0.0.1:8000/submit",
     //     { name: this.pname, phone_number: this.tel, ministry: this.selectedMinistry, department : this.selectedDepartment, email : this.email }).then(response => {
@@ -195,4 +204,3 @@ export default {
   }
 };
 </script>
-
