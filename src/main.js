@@ -8,8 +8,11 @@ import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.min.css'
 import 'vue-material/dist/theme/default.css'
 
+import { mdbFooter, mdbContainer, mdbRow, mdbCol, mdbvue } from 'mdbvue'
+
 import VueAxios from 'vue-axios'
 import axios from 'axios'
+
 
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
 

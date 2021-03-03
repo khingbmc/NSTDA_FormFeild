@@ -3,8 +3,13 @@
     <md-app md-mode="reveal">
       <md-app-toolbar class="md-primary">
         <span class="md-title"
-          >แบบสำรวจชุดข้อมูลและแดชบอร์ดที่เกี่ยวข้องกับนโยบายรัฐบาล</span
+          ><img
+            style="height:2.5em;margin-right:1em;"
+            src="@/assets/Seal_of_the_Office_of_the_Prime_Minister_of_Thailand.svg.png"
+          />แบบสำรวจชุดข้อมูลและแดชบอร์ดที่เกี่ยวข้องกับนโยบายรัฐบาล</span
         >
+          <img style="height:2.5em; position: absolute;right: 0px;margin-right:1em;" src="@/assets/GBDi_Logo_retina.png" >
+
       </md-app-toolbar>
     </md-app>
     <router-view />
@@ -438,4 +443,3 @@ export default {
   }
 })();
 </script>
-
