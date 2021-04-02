@@ -273,7 +273,7 @@ export default {
     //    }
   },
   mounted: function() {
-    this.axios.get("http://127.0.0.1:8000/min").then(response => {
+    this.axios.get("http://35.197.128.3:8000/min").then(response => {
       this.ministry = response.data;
       console.log(response.data);
     });
