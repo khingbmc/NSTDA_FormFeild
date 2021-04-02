@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 import psycopg2
 from datetime import datetime
+import uvicorn
 from pydantic import BaseModel
 import shutil
 import os
@@ -90,5 +91,8 @@ async def create_upload_file(name : str = Form(...), phone_number : str = Form(.
                             VALUES( '%s', '%s', '%s', '%s', '%s', '%s', '%s');""" % (get_request),False)
     
     connection.commit()
+    
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
 
 
