@@ -227,7 +227,7 @@ export default {
       this.department = null;
       this.selectedDepartment = null;
       this.axios
-        .get("http://0.0.0.0:8000/dep?ministry=" + this.selectedMinistry)
+        .get("http://35.197.128.3:8000/dep?ministry=" + this.selectedMinistry)
         .then(response => {
           this.department = response.data;
           console.log(response.data);
@@ -247,7 +247,7 @@ export default {
       console.log(formData);
       this.alert_dialog = true;
       this.axios
-        .post("http://0.0.0.0:8000/submit", formData, {
+        .post("http://35.197.128.3:8000/submit", formData, {
           headers: {
             "Content-Type": "multipart/form-data"
           }
