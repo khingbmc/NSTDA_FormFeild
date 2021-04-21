@@ -21,11 +21,13 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-connection = psycopg2.connect(user="postgresadmin",
-                                password="12345678",
-                                host="db-spm.can6o4phsaje.ap-southeast-1.rds.amazonaws.com",
+
+connection = psycopg2.connect(user="spmadmin",
+                                password="Spm_2021@gbdi!depa",
+                                host="202.139.197.37",
                                 port="5432",
-                                database="postgres")
+                                database="spmdb")
+
 def query_data(postgreSQL_select_Query,check=True):
     cursor = connection.cursor()
 
@@ -43,7 +45,7 @@ def query_data(postgreSQL_select_Query,check=True):
 @app.get("/min")
 def read_root():
     records = query_data("""SELECT id, "name"
-                                FROM public.ministry;  """)
+                                FROM "WEB_SURVEY".ministry;  """)
     lst_dict = []
     for i in records:
         lst_dict.append({'name': i[1], 'key':i[0]})
@@ -54,7 +56,7 @@ def read_root():
 @app.get("/dep")
 async def read_root(ministry:int = 1):
     records = query_data("""SELECT mini_id, "name"
-                                FROM public.department
+                                FROM "WEB_SURVEY".department
                                 WHERE mini_id = %d;  """ % (ministry))
     lst_dict = []
     for i in records:
@@ -72,7 +74,7 @@ class FormObject(BaseModel):
 async def create_upload_file(name : str = Form(...), phone_number : str = Form(...), email : str = Form(...), ministry : str = Form(...),department : str = Form(...), template_upload : UploadFile = File(...)):
     # write_file
     ministry_name = query_data("""SELECT  "name"
-                                FROM public.ministry
+                                FROM "WEB_SURVEY".ministry
                                 WHERE id = %d;  """ % (int(ministry)))
     day_path = datetime.now().strftime('%d-%m-%Y')
     if not os.path.exists('request_submitted/'+day_path):
@@ -85,14 +87,12 @@ async def create_upload_file(name : str = Form(...), phone_number : str = Form(.
 
     now_date = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
     ministry_name = ''.join(ministry_name[0])
-    get_request = (name, phone_number, ministry_name, department, template_upload.filename, now_date, email)
-    get_data = query_data("""INSERT INTO public.survey_spm
-                            ("name", phone_number, ministry, department, template_upload, submit_date, email)
+    get_request = (name, phone_number, email, ministry_name, department, template_upload.filename, now_date)
+    get_data = query_data("""INSERT INTO "WEB_SURVEY".survey_spm
+                            ("name", phone_number, email, ministry, department, template_upload, submit_date)
                             VALUES( '%s', '%s', '%s', '%s', '%s', '%s', '%s');""" % (get_request),False)
     
     connection.commit()
     
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
-
-
