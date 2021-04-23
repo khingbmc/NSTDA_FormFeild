@@ -88,7 +88,7 @@ async def create_upload_file(name : str = Form(...), phone_number : str = Form(.
     now_date = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
     ministry_name = ''.join(ministry_name[0])
     get_request = (name, phone_number, email, ministry_name, department, template_upload.filename, now_date)
-    get_data = query_data("""INSERT INTO "WEB_SURVEY".survey_spm
+    get_data = query_data("""INSERT INTO "WEB_SURVEY".spm_survey
                             ("name", phone_number, email, ministry, department, template_upload, submit_date)
                             VALUES( '%s', '%s', '%s', '%s', '%s', '%s', '%s');""" % (get_request),False)
     
